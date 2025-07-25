@@ -5,10 +5,7 @@ import csv
 from datetime import datetime
 import os
 
-port = int(os.environ.get('PORT', 5000))
-app.run(host='0.0.0.0', port=port)
-
-app = Flask(__name__)
+app = Flask(__name__)  # Define la app aquí
 
 def get_mysql_connection():
     return mysql.connector.connect(
@@ -57,7 +54,7 @@ def descargar_csv():
 
     output.seek(0)
 
-    # Eliminar registros
+    # Borra datos después de descargar
     cursor.execute("DELETE FROM lecturas")
     conn.close()
 
@@ -69,4 +66,5 @@ def descargar_csv():
     )
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))  # Puerto dinámico de Render
+    app.run(host='0.0.0.0', port=port)
