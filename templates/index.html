@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Dashboard de Sensores</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -12,19 +12,19 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
       <div class="bg-white shadow-md rounded-2xl p-6">
         <h2 class="text-xl font-semibold text-gray-600">⏱️ Timestamp</h2>
-        <p class="text-2xl font-mono text-gray-900 mt-2" id="timestamp">Cargando...</p>
+        <p id="timestamp" class="text-2xl font-mono text-gray-900 mt-2">Cargando...</p>
       </div>
       <div class="bg-white shadow-md rounded-2xl p-6">
         <h2 class="text-xl font-semibold text-gray-600">🔥 Temp MAX (°C)</h2>
-        <p class="text-2xl font-mono text-red-600 mt-2" id="temp_max">Cargando...</p>
+        <p id="temp_max" class="text-2xl font-mono text-red-600 mt-2">Cargando...</p>
       </div>
       <div class="bg-white shadow-md rounded-2xl p-6">
         <h2 class="text-xl font-semibold text-gray-600">🌬️ Temp DHT (°C)</h2>
-        <p class="text-2xl font-mono text-blue-600 mt-2" id="temp_dht">Cargando...</p>
+        <p id="temp_dht" class="text-2xl font-mono text-blue-600 mt-2">Cargando...</p>
       </div>
       <div class="bg-white shadow-md rounded-2xl p-6">
         <h2 class="text-xl font-semibold text-gray-600">💧 Humedad (%)</h2>
-        <p class="text-2xl font-mono text-green-600 mt-2" id="humedad">Cargando...</p>
+        <p id="humedad" class="text-2xl font-mono text-green-600 mt-2">Cargando...</p>
       </div>
     </div>
 
@@ -37,16 +37,23 @@
 
   <script>
     async function cargarDatos() {
-      const res = await fetch('/api/datos');
-      const data = await res.json();
+      try {
+        const response = await fetch('/api/datos');
+        const data = await response.json();
 
-      document.getElementById('timestamp').innerText = data.timestamp || 'N/A';
-      document.getElementById('temp_max').innerText = data.temp_max || 'N/A';
-      document.getElementById('temp_dht').innerText = data.temp_dht || 'N/A';
-      document.getElementById('humedad').innerText = data.humedad || 'N/A';
+        document.getElementById('timestamp').innerText = data.timestamp || 'N/A';
+        document.getElementById('temp_max').innerText = data.temp_max !== undefined ? data.temp_max : 'N/A';
+        document.getElementById('temp_dht').innerText = data.temp_dht !== undefined ? data.temp_dht : 'N/A';
+        document.getElementById('humedad').innerText = data.humedad !== undefined ? data.humedad : 'N/A';
+      } catch (error) {
+        console.error('Error al cargar datos:', error);
+      }
     }
 
+    // Actualiza cada 5 segundos
     setInterval(cargarDatos, 5000);
+
+    // Carga datos al iniciar la página
     cargarDatos();
   </script>
 </body>
