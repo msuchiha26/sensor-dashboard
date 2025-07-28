@@ -1,18 +1,18 @@
 from flask import Flask, render_template, jsonify, send_file
 import mysql.connector
-import io
 import csv
-from datetime import datetime
+import io
 import os
+from datetime import datetime
 
-app = Flask(__name__)  # Define la app aquí
+app = Flask(__name__)
 
 def get_mysql_connection():
     return mysql.connector.connect(
-        host='base-condensador.cjagmwui8z8e.us-east-2.rds.amazonaws.com',
-        user='msuchiha',
-        password='90_Naruto_26',
-        database='datos-sensores',
+        host=os.getenv('MYSQL_HOST'),
+        user=os.getenv('MYSQL_USER'),
+        password=os.getenv('MYSQL_PASSWORD'),
+        database=os.getenv('MYSQL_DATABASE'),
         autocommit=True
     )
 
@@ -54,7 +54,6 @@ def descargar_csv():
 
     output.seek(0)
 
-    # Borra datos después de descargar
     cursor.execute("DELETE FROM lecturas")
     conn.close()
 
@@ -66,5 +65,5 @@ def descargar_csv():
     )
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Puerto dinámico de Render
+    port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
