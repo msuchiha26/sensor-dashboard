@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: condensador_01
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
+    envVars:
+      - key: MYSQL_HOST
+        value: ""  # Configura este valor en el panel Render, no aquí
+      - key: MYSQL_USER
+        value: ""
+      - key: MYSQL_PASSWORD
+        value: ""
+      - key: MYSQL_DATABASE
+        value: ""
+      - key: PORT
+        value: "5000"
